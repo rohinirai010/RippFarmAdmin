@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import mainLogo from "../images/mainLogo.png";
 import logoLight from "../images/logoLight.png"; 
+import sidebarLogoCollapsed from "../images/sidebarLogoCollapsed.png";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import {
   MdKeyboardArrowDown,
@@ -171,21 +172,21 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
       const isActive = pathname === child.path;
       
       return (
-        <li key={`${item.id}-child-${index}`} className="mb-2 last:mb-0">
+        <li key={`${item.id}-child-${index}`} className="mb-1 last:mb-0">
           <NavLink
             end
             to={child.path}
             className={({ isActive }) =>
               `block transition duration-150 truncate py-1 px-3 rounded-md ${
                 isActive
-                  ? "text-violet-600 dark:text-violet-300 bg-violet-50 dark:bg-violet-900/30 font-medium"
-                  : "text-slate-600 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-300 hover:bg-violet-50/50 dark:hover:bg-violet-900/20"
+                  ? "text-violet-600 dark:text-violet-300 bg-violet-50 dark:bg-[#2742ea]/30 font-medium"
+                  : "text-slate-600 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-300 hover:bg-violet-50/50 dark:hover:bg-[#2742ea]/20"
               }`
             }
           >
             <div className="flex items-center">
               <div className="w-1 h-1 rounded-full bg-current mr-2"></div>
-              <span className="text-xs lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
+              <span className="text-xs lg:sidebar-expanded:opacity-100 duration-200">
                 {child.title}
               </span>
             </div>
@@ -199,7 +200,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
     <div className="min-w-fit">
       {/* Sidebar backdrop (mobile only) */}
       <div
-        className={`fixed text-right inset-0 bg-gray-900/60 backdrop-blur-sm z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
+        className={`fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
           sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden="true"
@@ -226,8 +227,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
               <img
                 src={isDarkMode ? logoLight : mainLogo}
                 alt="Logo"
-                className="w-[8rem] h-[1.7rem]"
+                className="w-[8rem] h-[1.7rem] lg:hidden lg:sidebar-expanded:block"
               />
+              <div className="hidden lg:block lg:sidebar-expanded:hidden">
+               
+                  <img src={sidebarLogoCollapsed} alt="Sidebar Logo Small" />
+               
+              </div>
             </NavLink>
 
             {/* Close button */}
@@ -260,44 +266,67 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
         </div>
 
         {/* Links */}
-        <div className="space-y-0.5 mt-6  scrollbar-thin scrollbar-thumb-violet-200 dark:scrollbar-thumb-violet-900 scrollbar-track-transparent">
+        <div className="space-y-0.5 mt-6 scrollbar-thin scrollbar-thumb-violet-200 dark:scrollbar-thumb-violet-900 scrollbar-track-transparent overflow-hidden">
           {/* Pages group */}
           <div>
-            <h3 className="text-xs uppercase text-slate-400 dark:text-slate-500 font-semibold tracking-wider  mb-3">Menu</h3>
+            <h3 className="text-xs uppercase text-slate-400 dark:text-slate-500 font-semibold tracking-wider mb-3 lg:hidden lg:sidebar-expanded:block">
+              Menu
+            </h3>
             <ul className="space-y-1">
               {/* Map through navItems to generate sidebar links */}
               {navItems.map((item) => {
                 const isActive = pathname === item.path || pathname.includes(item.id);
                 
                 return (
-                <SidebarLinkGroup
-                  key={item.id}
-                  activecondition={isActive}
-                >
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <a
-                          href={item.path || "#0"}
-                          className={`block transition duration-150 ${
-                            isActive
-                              ? "bg-gradient-to-r from-[#5767d3] to-[#2742ea] bg-clip-text text-transparent"
-                              : "text-slate-600 dark:text-slate-400 dark:hover:text-[#2742ea]/80"
-                          }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (item.hasDropdown) {
-                              handleClick();
-                              setSidebarExpanded(true);
-                            } else if (item.path) {
-                              // Navigate directly for non-dropdown items
-                              window.location.href = item.path;
-                            }
-                          }}
-                        >
-                          {item.path ? (
-                            <NavLink end to={item.path}>
-                              <div className="flex items-center justify-between py-1" title={item.title}>
+                  <SidebarLinkGroup
+                    key={item.id}
+                    activecondition={isActive}
+                  >
+                    {(handleClick, open) => {
+                      return (
+                        <React.Fragment>
+                          <a
+                            href={item.path || "#0"}
+                            className={`block transition duration-150 ${
+                              isActive
+                                ? "bg-gradient-to-r from-[#5767d3] to-[#2742ea] bg-clip-text text-transparent"
+                                : "text-slate-600 dark:text-slate-400 dark:hover:text-[#2742ea]/80"
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (item.hasDropdown) {
+                                handleClick();
+                                setSidebarExpanded(true);
+                              } else if (item.path) {
+                                // Navigate directly for non-dropdown items
+                                window.location.href = item.path;
+                              }
+                            }}
+                          >
+                            {item.path ? (
+                              <NavLink end to={item.path}>
+                                <div 
+                                  className="flex items-center justify-between py-1" 
+                                  title={item.title}
+                                >
+                                  <div className="flex items-center">
+                                    <span className={`bg-gradient-to-br ${isActive ? 
+                                      'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
+                                      'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
+                                      p-1.5 rounded-md text-white shadow-sm`}>
+                                      {React.cloneElement(item.icon, { className: "w-4 h-4" })}
+                                    </span>
+                                    <span className="text-sm ml-3 font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
+                                      {item.title}
+                                    </span>
+                                  </div>
+                                </div>
+                              </NavLink>
+                            ) : (
+                              <div 
+                                className="flex items-center justify-between py-1" 
+                                title={item.title}
+                              >
                                 <div className="flex items-center">
                                   <span className={`bg-gradient-to-br ${isActive ? 
                                     'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
@@ -309,45 +338,31 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                                     {item.title}
                                   </span>
                                 </div>
+                                {item.hasDropdown && (
+                                  <div className="flex shrink-0">
+                                    <MdKeyboardArrowDown
+                                      className={`w-5 h-5 shrink-0 transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
+                                        open && "rotate-180"
+                                      }`}
+                                    />
+                                  </div>
+                                )}
                               </div>
-                            </NavLink>
-                          ) : (
-                            <div className="flex items-center justify-between py-1" title={item.title}>
-                              <div className="flex items-center">
-                                <span className={`bg-gradient-to-br ${isActive ? 
-                                  'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
-                                  'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
-                                  p-1.5 rounded-md text-white shadow-sm`}>
-                                  {React.cloneElement(item.icon, { className: "w-4 h-4" })}
-                                </span>
-                                <span className="text-sm ml-3 font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
-                                  {item.title}
-                                </span>
-                              </div>
-                              {item.hasDropdown && (
-                                <div className="flex shrink-0">
-                                  <MdKeyboardArrowDown
-                                    className={`w-5 h-5 shrink-0 transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
-                                      open && "rotate-180"
-                                    }`}
-                                  />
-                                </div>
-                              )}
+                            )}
+                          </a>
+                          {item.hasDropdown && (
+                            <div className="lg:hidden lg:sidebar-expanded:block">
+                              <ul className={`pl-7 mt-1 ${!open && "hidden"}`}>
+                                {renderNavItemChildren(item, open)}
+                              </ul>
                             </div>
                           )}
-                        </a>
-                        {item.hasDropdown && (
-                          <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul className={`pl-7 mt-1 ${!open && "hidden"}`}>
-                              {renderNavItemChildren(item, open)}
-                            </ul>
-                          </div>
-                        )}
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              )})}
+                        </React.Fragment>
+                      );
+                    }}
+                  </SidebarLinkGroup>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -370,4 +385,3 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
 }
 
 export default Sidebar;
-
