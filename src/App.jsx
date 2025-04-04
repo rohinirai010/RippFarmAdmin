@@ -76,7 +76,7 @@ function App() {
     <Provider store={store}>
       <Routes>
         {/* admin routes */}
-        <Route exact path="/admin/login" element={<Login />} />
+        <Route exact path="/" element={<Login />} />
         <Route
           path="/admin/dashboard"
           element={
@@ -144,7 +144,7 @@ function App() {
         />
 
         {/* user routes */}
-        <Route exact path="/" element={<Registration />} />
+        {/* <Route exact path="/" element={<Registration />} /> */}
         <Route exact path="/user/welcome-letter" element={<WelcomeLetter />} />
         <Route exact path="/user/login" element={<UserLogin />} />
         <Route exact path="/user/reset-password" element={<ForgotPassword />} />

@@ -53,12 +53,12 @@ function DropdownProfile({ align }) {
     dispatch(logoutAdmin()).unwrap()
       .then(() => {
         // Navigate after logout is complete
-        navigate('/admin/login', { replace: true });
+        navigate('/', { replace: true });
       })
       .catch((error) => {
         console.error("Logout failed:", error);
         // Still navigate to login page even if logout fails
-        navigate('/admin/login', { replace: true });
+        navigate('/', { replace: true });
       });
   };
 

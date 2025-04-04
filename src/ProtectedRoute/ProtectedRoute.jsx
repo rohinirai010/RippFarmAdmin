@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Redirect to login if not authenticated (checking both Redux state AND localStorage)
   if (!isAuthenticated || !isLocallyAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Render the protected component

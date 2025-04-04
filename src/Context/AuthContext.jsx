@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     // Admin login
     const adminLogin = async (username, password) => {
         try {
-            const res = await axios.post("http://localhost:5000/admin/login", { username, password });
+            const res = await axios.post("http://localhost:5000/", { username, password });
             localStorage.setItem("token", res.data.token);
             setAdminUser(jwtDecode(res.data.token));
         } catch (error) {
