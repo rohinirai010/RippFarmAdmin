@@ -102,10 +102,10 @@ export default function Login() {
 
   useEffect(() => {
     if (successMessage) {
-      toast.success(successMessage);
-      setTimeout(() => {
-        navigate("/admin/dashboard");
-      }, 1000);
+      toast.success(successMessage, {
+        autoClose: 3000,  
+        onClose: () => navigate("/admin/dashboard")
+      });
     }
   }, [successMessage, navigate]);
 
@@ -337,7 +337,9 @@ export default function Login() {
         <span className="font-bold text-xl md:text-2xl">Ripp</span>farm
       </div>
       
-      <ToastContainer position="top-center" autoClose={5000} />
+      <ToastContainer position="top-center" autoClose={5000} style={{ fontSize: '14px', zIndex: 9999 }}
+  theme="colored"/>
     </div>
   );
 }
+
