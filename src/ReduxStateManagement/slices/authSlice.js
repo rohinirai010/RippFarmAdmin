@@ -4,13 +4,91 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "admin123";
 
-// Async thunk for login with fixed credentials
+// Constants
+const MAX_LOGIN_ATTEMPTS = 3;
+const IP_BLOCK_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
+
+// Store for blocked IPs
+const blockedIPs = {};
+
+// Generate a text CAPTCHA
+const generateCaptcha = () => {
+  // Characters to include in the CAPTCHA (omitting ambiguous characters)
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let captchaText = '';
+  
+  // Generate 6 random characters
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    captchaText += chars[randomIndex];
+  }
+  
+  return {
+    text: captchaText,
+    answer: captchaText, // In a simple text CAPTCHA, answer is the same as text
+    id: Math.random().toString(36).substring(2, 10) // Random ID for tracking
+  };
+};
+
+// Check if IP is blocked
+export const checkIpBlocked = createAsyncThunk(
+  'auth/checkIpBlocked',
+  async (ip) => {
+    // If IP is in blockedIPs
+    if (blockedIPs[ip]) {
+      const now = Date.now();
+      const blockExpiry = blockedIPs[ip];
+      
+      // If block has expired, remove it
+      if (now >= blockExpiry) {
+        delete blockedIPs[ip];
+        return { 
+          blocked: false,
+          remainingTime: 0
+        };
+      }
+      
+      // Block still active
+      return { 
+        blocked: true,
+        remainingTime: blockExpiry - now
+      };
+    }
+    
+    return { 
+      blocked: false,
+      remainingTime: 0
+    };
+  }
+);
+
+// Async thunk for login with fixed credentials and CAPTCHA verification
 export const loginAdmin = createAsyncThunk(
   'auth/loginAdmin',
-  async ({ username, password }, { rejectWithValue }) => {
+  async ({ username, password, captchaInput, ip }, { rejectWithValue, getState }) => {
     try {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Get current state
+      const { captcha, failedAttempts } = getState().auth;
+      
+      // Check if IP is blocked
+      if (blockedIPs[ip] && Date.now() < blockedIPs[ip]) {
+        return rejectWithValue({ 
+          error: "IP address is blocked due to too many failed attempts", 
+          status: 429,
+          blockTimeRemaining: blockedIPs[ip] - Date.now()
+        });
+      }
+      
+      // Verify CAPTCHA first (case-insensitive comparison)
+      if (!captcha || captchaInput.toUpperCase() !== captcha.answer) {
+        return rejectWithValue({ 
+          error: "Invalid CAPTCHA verification", 
+          status: 400 
+        });
+      }
       
       // Check credentials
       if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
@@ -33,10 +111,25 @@ export const loginAdmin = createAsyncThunk(
           token
         };
       } else {
+        // Calculate attempts left
+        const attemptsLeft = MAX_LOGIN_ATTEMPTS - failedAttempts - 1;
+        
+        // If no attempts left, block the IP
+        if (attemptsLeft <= 0) {
+          blockedIPs[ip] = Date.now() + IP_BLOCK_DURATION;
+          
+          return rejectWithValue({ 
+            error: "Too many failed attempts. Your IP has been blocked.",
+            status: 429,
+            blockTimeRemaining: IP_BLOCK_DURATION
+          });
+        }
+        
         // Reject with authentication error
         return rejectWithValue({ 
           error: "Invalid username or password", 
-          status: 401 
+          status: 401,
+          attemptsLeft
         });
       }
     } catch (error) {
@@ -51,23 +144,38 @@ export const loginAdmin = createAsyncThunk(
 // Async thunk for logout
 export const logoutAdmin = createAsyncThunk(
   'auth/logoutAdmin',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
-      
-      // Clear localStorage - Make sure this is executed
+      // Clear localStorage FIRST
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminInfo');
+      
+      // Then dispatch a clean state update
+      dispatch(forceLogout());
+      
+      // Small delay to ensure state updates
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       return null;
     } catch (error) {
-      // Even on error, attempt to clear local storage
+      // Fallback cleanup
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminInfo');
-      
-      return rejectWithValue({ error: 'Logout failed' });
+      dispatch(forceLogout());
+      return rejectWithValue('Logout failed');
     }
+  }
+);
+
+// Refresh CAPTCHA action
+export const refreshCaptcha = createAsyncThunk(
+  'auth/refreshCaptcha',
+  async () => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    // Generate new CAPTCHA
+    return generateCaptcha();
   }
 );
 
@@ -85,7 +193,12 @@ const getInitialState = () => {
       loading: false,
       error: null,
       errorCode: null,
-      successMessage: null
+      successMessage: null,
+      captcha: null,
+      failedAttempts: 0,
+      attemptsLeft: MAX_LOGIN_ATTEMPTS,
+      ipBlocked: false,
+      blockTimeRemaining: 0
     };
   } catch (error) {
     // If anything goes wrong, return a clean state
@@ -97,7 +210,12 @@ const getInitialState = () => {
       loading: false,
       error: null,
       errorCode: null,
-      successMessage: null
+      successMessage: null,
+      captcha: null,
+      failedAttempts: 0,
+      attemptsLeft: MAX_LOGIN_ATTEMPTS,
+      ipBlocked: false,
+      blockTimeRemaining: 0
     };
   }
 };
@@ -120,6 +238,11 @@ const authSlice = createSlice({
       state.token = null;
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminInfo');
+    },
+    // Reset attempts (e.g. when navigating away and back)
+    resetAttempts: (state) => {
+      state.failedAttempts = 0;
+      state.attemptsLeft = MAX_LOGIN_ATTEMPTS;
     }
   },
   extraReducers: (builder) => {
@@ -136,6 +259,10 @@ const authSlice = createSlice({
         state.admin = action.payload.admin;
         state.token = action.payload.token;
         state.successMessage = 'Login successful!';
+        state.failedAttempts = 0;
+        state.attemptsLeft = MAX_LOGIN_ATTEMPTS;
+        // Generate new CAPTCHA for next login
+        state.captcha = generateCaptcha();
       })
       .addCase(loginAdmin.rejected, (state, action) => {
         state.loading = false;
@@ -144,6 +271,21 @@ const authSlice = createSlice({
         state.token = null;
         state.error = action.payload?.error || 'Invalid credentials';
         state.errorCode = action.payload?.status || 401;
+        
+        // If too many attempts, mark IP as blocked
+        if (action.payload?.status === 429) {
+          state.ipBlocked = true;
+          state.blockTimeRemaining = action.payload?.blockTimeRemaining || IP_BLOCK_DURATION;
+        } else {
+          // Only increment attempts for password failures
+          if (action.payload?.status === 401) {
+            state.failedAttempts += 1;
+            state.attemptsLeft = action.payload?.attemptsLeft || (MAX_LOGIN_ATTEMPTS - state.failedAttempts);
+          }
+        }
+        
+        // Generate new CAPTCHA
+        state.captcha = generateCaptcha();
       })
       // Logout cases
       .addCase(logoutAdmin.pending, (state) => {
@@ -154,7 +296,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.admin = null;
         state.token = null;
-        state.successMessage = 'Logout successful';
+        // Clear any messages that might cause confusion
+        state.successMessage = null;
+        state.error = null;
+        state.errorCode = null;
       })
       .addCase(logoutAdmin.rejected, (state) => {
         // Even on error, make sure we clear auth state
@@ -162,10 +307,25 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.admin = null;
         state.token = null;
+      })
+      // CAPTCHA refresh cases
+      .addCase(refreshCaptcha.fulfilled, (state, action) => {
+        state.captcha = action.payload;
+      })
+      // IP Block check
+      .addCase(checkIpBlocked.fulfilled, (state, action) => {
+        state.ipBlocked = action.payload.blocked;
+        state.blockTimeRemaining = action.payload.remainingTime;
+        
+        // If no longer blocked, reset attempts
+        if (!action.payload.blocked) {
+          state.failedAttempts = 0;
+          state.attemptsLeft = MAX_LOGIN_ATTEMPTS;
+        }
       });
   }
 });
 
-export const { clearErrors, clearMessages, forceLogout } = authSlice.actions;
+export const { clearErrors, clearMessages, forceLogout, resetAttempts } = authSlice.actions;
 
 export default authSlice.reducer;

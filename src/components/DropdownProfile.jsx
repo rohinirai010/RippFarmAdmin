@@ -42,24 +42,27 @@ function DropdownProfile({ align }) {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     setDropdownOpen(false);
     
-    // Manually clear localStorage first to ensure it's gone before React re-renders
-    localStorage.removeItem('adminToken');
-    localStorage.removeItem('adminInfo');
-    
-    // Then dispatch the logout action
-    dispatch(logoutAdmin()).unwrap()
-      .then(() => {
-        // Navigate after logout is complete
-        navigate('/', { replace: true });
-      })
-      .catch((error) => {
-        console.error("Logout failed:", error);
-        // Still navigate to login page even if logout fails
-        navigate('/', { replace: true });
-      });
+    try {
+      // Clear storage immediately
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminInfo');
+      
+      // Dispatch logout action
+      await dispatch(logoutAdmin()).unwrap();
+      
+      // Navigate after ensuring logout is complete
+      navigate('/', { replace: true });
+      
+     
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Still navigate to login page
+      navigate('/', { replace: true });
+      window.location.reload();
+    }
   };
 
   return (
