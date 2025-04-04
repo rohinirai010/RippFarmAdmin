@@ -374,8 +374,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
               AD
             </div>
             <div className="ml-3 lg:hidden lg:sidebar-expanded:block duration-200">
-              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Admin User</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Administrator</p>
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Master Admin</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Last Login: timestamp (last login)</p>
             </div>
           </div>
         </div>
