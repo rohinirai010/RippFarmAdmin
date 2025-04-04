@@ -186,7 +186,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
           >
             <div className="flex items-center">
               <div className="w-1 h-1 rounded-full bg-current mr-2"></div>
-              <span className="text-xs lg:sidebar-expanded:opacity-100 duration-200">
+              <span className="text-xs lg:hidden lg:sidebar-expanded:block duration-200">
                 {child.title}
               </span>
             </div>
@@ -201,7 +201,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
       {/* Sidebar backdrop (mobile only) */}
       <div
         className={`fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
-          sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          sidebarOpen ? "block" : "hidden pointer-events-none"
         }`}
         aria-hidden="true"
       ></div>
@@ -316,7 +316,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                                       p-1.5 rounded-md text-white shadow-sm`}>
                                       {React.cloneElement(item.icon, { className: "w-4 h-4" })}
                                     </span>
-                                    <span className="text-sm ml-3 font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
+                                    <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
                                       {item.title}
                                     </span>
                                   </div>
@@ -334,14 +334,14 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                                     p-1.5 rounded-md text-white shadow-sm`}>
                                     {React.cloneElement(item.icon, { className: "w-4 h-4" })}
                                   </span>
-                                  <span className="text-sm ml-3 font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
+                                  <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
                                     {item.title}
                                   </span>
                                 </div>
                                 {item.hasDropdown && (
                                   <div className="flex shrink-0">
                                     <MdKeyboardArrowDown
-                                      className={`w-5 h-5 shrink-0 transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
+                                      className={`w-5 h-5 shrink-0 lg:hidden lg:sidebar-expanded:block transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
                                         open && "rotate-180"
                                       }`}
                                     />
@@ -369,11 +369,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
         
         {/* Admin profile section */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-3">
-          <div className="flex items-center px-2 py-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
+          <div className="flex items-center lg:px-0 lg:sidebar-expanded:px-2  py-2">
+            <div className=" w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
               AD
             </div>
-            <div className="ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
+            <div className="ml-3 lg:hidden lg:sidebar-expanded:block duration-200">
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Admin User</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">Administrator</p>
             </div>
