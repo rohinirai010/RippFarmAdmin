@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAdmin, clearErrors } from "../ReduxStateManagement/slices/authSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import loginLogo from "../images/loginLogo.png"
+import loginLogo from "../images/loginlogo.png"
 import loginBgImg from "../images/loginBgImg.png"
 import loginBrandName from "../images/loginBrandName.png"
 
