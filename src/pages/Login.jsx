@@ -132,7 +132,7 @@ export default function Login() {
             <input
               id="username"
               type="text"
-              className="w-full px-3 md:px-4 py-2 md:py-3 bg-white rounded-xl md:rounded-2xl focus:outline-none"
+              className="w-full px-3 md:px-4 py-2 md:py-3 bg-white text-gray-700 rounded-xl md:rounded-2xl focus:outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your Username"
@@ -152,7 +152,7 @@ export default function Login() {
             <input
               id="password"
               type="password"
-              className="w-full px-3 md:px-4 py-2 md:py-3 bg-white rounded-xl md:rounded-2xl focus:outline-none"
+              className="w-full px-3 md:px-4 py-2 md:py-3 bg-white text-gray-700 rounded-xl md:rounded-2xl focus:outline-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your Password"

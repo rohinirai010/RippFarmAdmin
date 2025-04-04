@@ -212,7 +212,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
         className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] w-64 lg:w-20 lg:sidebar-expanded:w-64 shrink-0 
         ${variant === "v2" 
           ? "border-r border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900" 
-          : "border-r-2 rounded-2xl border-violet-600 bg-white dark:bg-slate-900 shadow-lg shadow-violet-500/5 dark:shadow-violet-400/5"
+          : "border-r-2 rounded-2xl border-[#2742ea] bg-white dark:bg-slate-900 shadow-lg shadow-violet-500/5 dark:shadow-violet-400/5"
         }
         p-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
@@ -246,7 +246,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
           {/* Expand / collapse button */}
           <div className="hidden lg:inline-flex">
             <button
-              className="text-slate-400 hover:text-violet-500 dark:text-slate-500 dark:hover:text-violet-400 transition duration-150 cursor-pointer"
+              className="text-slate-400 hover:text-violet-500 dark:text-slate-500 dark:hover:text-[#2742ea] transition duration-150 cursor-pointer"
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
             >
               <span className="sr-only">Expand / collapse sidebar</span>
@@ -281,8 +281,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                           href={item.path || "#0"}
                           className={`block transition duration-150 ${
                             isActive
-                              ? "text-violet-600 dark:text-violet-300"
-                              : "text-slate-600 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-300"
+                              ? "bg-gradient-to-r from-[#5767d3] to-[#2742ea] bg-clip-text text-transparent"
+                              : "text-slate-600 dark:text-slate-400 dark:hover:text-[#2742ea]/80"
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -300,7 +300,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                               <div className="flex items-center justify-between py-1" title={item.title}>
                                 <div className="flex items-center">
                                   <span className={`bg-gradient-to-br ${isActive ? 
-                                    'from-violet-500 to-indigo-600 dark:from-violet-400 dark:to-indigo-500' : 
+                                    'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
                                     'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
                                     p-1.5 rounded-md text-white shadow-sm`}>
                                     {React.cloneElement(item.icon, { className: "w-4 h-4" })}
@@ -315,7 +315,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                             <div className="flex items-center justify-between py-1" title={item.title}>
                               <div className="flex items-center">
                                 <span className={`bg-gradient-to-br ${isActive ? 
-                                  'from-violet-500 to-indigo-600 dark:from-violet-400 dark:to-indigo-500' : 
+                                  'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
                                   'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
                                   p-1.5 rounded-md text-white shadow-sm`}>
                                   {React.cloneElement(item.icon, { className: "w-4 h-4" })}
@@ -355,7 +355,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
         {/* Admin profile section */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-3">
           <div className="flex items-center px-2 py-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-indigo-600 flex items-center justify-center text-white font-medium text-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
               AD
             </div>
             <div className="ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 duration-200">
@@ -370,3 +370,4 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
 }
 
 export default Sidebar;
+

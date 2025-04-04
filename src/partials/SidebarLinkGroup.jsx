@@ -13,8 +13,8 @@ const SidebarLinkGroup = ({ children, activecondition }) => {
        py-1 rounded-lg mb-1 last:mb-0 
         transition-all duration-150 ease-in-out
         ${activecondition ? 
-          'bg-violet-50 dark:bg-violet-900/20' : 
-          'hover:bg-violet-50/50 dark:hover:bg-violet-900/10'
+          'bg-violet-50 dark:bg-[#2742ea]/30' : 
+          'hover:bg-violet-50/50 dark:hover:bg-[#2742ea]/20'
         }
       `}
     >
@@ -24,3 +24,6 @@ const SidebarLinkGroup = ({ children, activecondition }) => {
 };
 
 export default SidebarLinkGroup;
+
+//
+
