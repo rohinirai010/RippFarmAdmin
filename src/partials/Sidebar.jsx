@@ -197,6 +197,21 @@ function Sidebar({
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  // Helper function to check if a parent menu item should be active
+  const isParentActive = (item) => {
+    // If the item has a direct path and it matches the current path
+    if (item.path && pathname === item.path) {
+      return true;
+    }
+    
+    // If the item has children, check if any child path matches the current path
+    if (item.hasDropdown && item.children) {
+      return item.children.some(child => !child.hidden && pathname === child.path);
+    }
+    
+    return false;
+  };
+
   // Render navItem dropdown children
   const renderNavItemChildren = (item, open) => {
     return item.children?.map((child, index) => {
@@ -311,8 +326,7 @@ function Sidebar({
             <ul className="space-y-1">
               {/* Map through navItems to generate sidebar links */}
               {navItems.map((item) => {
-                const isActive =
-                  pathname === item.path || pathname.includes(item.id);
+                const isActive = isParentActive(item);
 
                 return (
                   <SidebarLinkGroup key={item.id} activecondition={isActive}>
