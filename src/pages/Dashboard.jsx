@@ -41,6 +41,7 @@ import "../css/additional.css";
 import { PiHandDepositDuotone, PiHandWithdrawDuotone } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import SalesPerformanceCard from "../partials/dashboard/SalesPerformanceCard";
+import { BsTwitter } from "react-icons/bs";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -726,10 +727,10 @@ const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="grid grid-cols-2 gap-2 mb-3">
                     <SocialCard
-                      title="WhatsApp"
-                      icon={<FaWhatsapp className="w-5 h-5" />}
+                      title="Twitter"
+                      icon={<BsTwitter className="w-5 h-5" />}
                       color="green"
                     />
                     <SocialCard
@@ -737,11 +738,7 @@ const Dashboard = () => {
                       icon={<FaTelegram className="w-5 h-5" />}
                       color="blue"
                     />
-                    <SocialCard
-                      title="Facebook"
-                      icon={<FaFacebook className="w-5 h-5" />}
-                      color="purple"
-                    />
+                   
                   </div>
 
                   <div className="text-center">
