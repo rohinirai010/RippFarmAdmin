@@ -62,6 +62,7 @@ import LevelBonus from "./pages/Reports/LevelBonus";
 import TeamWinningBonus from "./pages/Reports/TeamWinningBonus";
 import RoyaltyBonus from "./pages/Bonanza/RoyaltyBonus";
 import SpecialReward from "./pages/Bonanza/SpecialReward";
+import HelpDesk from "./pages/Ticket/Ticket";
 
 function App() {
   const location = useLocation();
@@ -141,6 +142,12 @@ function App() {
           exact
           path="/admin/special-reward"
           element={<SpecialReward />}
+        />
+
+<Route
+          exact
+          path="/admin/ticket"
+          element={<HelpDesk />}
         />
 
         {/* user routes */}
