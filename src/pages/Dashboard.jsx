@@ -29,6 +29,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import aiBotImage from "../images/aiBotImg.png";
+import dashboardLogo from "../images/loginlogo.png"
 import {
   WalletCard,
   MetricCard,
@@ -154,53 +155,53 @@ const Dashboard = () => {
               <div className="relative flex flex-col sm:flex-row justify-between">
                 <div>
                   <h1 className="text-2xl font-bold mb-2 sm:text-3xl">
-                    Welcome to Bampas Trading Dashboard
+                    Welcome to Rippfarm Master Admin Dashboard
                   </h1>
-                  <p className="opacity-80 max-w-xl sm:max-w-md">
-                    Your Gateway to Seamless Trading Insights and Growth
-                  </p>
+                  
                   <div className="mt-4 flex gap-3 flex-row">
-                    {/* <button className="  bg-white text-indigo-600 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto">
-                      <DollarSign size={18} className="mr-2" />
+                  <button className="bg-white text-indigo-600 px-3  py-2 text-sm  rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto cursor-pointer">
+  <DollarSign size={16} className="mr-2" />
+  <span className="group-hover:mr-1 transition-all">
+    Add Funds
+  </span>
+  <ArrowRight
+    size={14}
+    className="ml-1   transition-all duration-300"
+  />
+</button>
+
+                    <button className="bg-indigo-900 bg-opacity-40 text-white px-3  py-2 text-sm  rounded-lg font-medium hover:bg-opacity-60 transition flex items-center justify-center group border border-white border-opacity-30 w-full sm:w-auto cursor-pointer ">
+                      <Upload size={16} className="mr-2" />
                       <span className="group-hover:mr-1 transition-all">
-                        Deposit
+                        Deduct Funds
                       </span>
                       <ArrowRight
                         size={14}
-                        className="ml-1 opacity-0 group-hover:opacity-100 transition-all"
+                        className="ml-1  transition-all"
                       />
                     </button>
-                    <button className="bg-indigo-900 bg-opacity-40 text-white px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg font-medium hover:bg-opacity-60 transition flex items-center justify-center group border border-white border-opacity-30 w-full sm:w-auto ">
-                      <Upload size={18} className="mr-2" />
-                      <span className="group-hover:mr-1 transition-all">
-                        Withdraw
-                      </span>
-                      <ArrowRight
-                        size={14}
-                        className="ml-1 opacity-0 group-hover:opacity-100 transition-all"
-                      />
-                    </button> */}
 
+                    
                     <button
-                      className=" text-indigo-600 bg-white dark:bg-indigo-900 bg-opacity-40 dark:text-white px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg font-medium hover:bg-opacity-60 transition flex items-center justify-center group border border-white border-opacity-30 w-full sm:w-auto cursor-pointer"
+                      className=" text-indigo-600 bg-white dark:bg-indigo-900 bg-opacity-40 dark:text-white px-3 py-2 text-sm  rounded-lg font-medium hover:bg-opacity-60 transition flex items-center justify-center group border border-white border-opacity-30 w-full sm:w-auto cursor-pointer"
                       onClick={handleCreateAccount}
                     >
-                      <PlusCircle size={18} className="mr-2" />
+                      <PlusCircle size={16} className="mr-2" />
                       <span className="group-hover:mr-1 transition-all">
-                        Account
+                      New Registration
                       </span>
                       <ArrowRight
                         size={14}
-                        className="ml-1 opacity-0 group-hover:opacity-100 transition-all"
+                        className="ml-1 transition-all"
                       />
                     </button>
                   </div>
                 </div>
                 <div className="hidden sm:flex items-center mt-4 sm:mt-0">
-                  <div className="bg-white p-4 rounded-xl text-indigo-600 shadow-lg transform hover:scale-105 transition-transform cursor-pointer">
+                  <div className="bg-[#191d4e] p-3 rounded-xl text-indigo-600 shadow-lg transform hover:scale-105 transition-transform cursor-pointer">
                     <div className="relative">
-                      <TrendingUp size={40} />
-                      <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-green-500 border-2 border-white"></div>
+                      <img src={dashboardLogo} alt="Dashboard Logo" className="w-9 h-9" />
+                      <div className="absolute -top-4 -right-5 w-4 h-4 rounded-full bg-green-500 border-2 border-white"></div>
                     </div>
                   </div>
                 </div>

@@ -10,7 +10,7 @@ const SidebarLinkGroup = ({ children, activecondition }) => {
   return (
     <li 
       className={`
-       py-1 rounded-lg mb-1 last:mb-0 
+       py-1 px-2 rounded-lg mb-1 last:mb-0 
         transition-all duration-150 ease-in-out
         ${activecondition ? 
           'bg-violet-50 dark:bg-[#2742ea]/30' : 

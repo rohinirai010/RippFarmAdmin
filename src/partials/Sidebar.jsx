@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import mainLogo from "../images/mainLogo.png";
-import logoLight from "../images/logoLight.png"; 
+import logoLight from "../images/logoLight.png";
 import sidebarLogoCollapsed from "../images/sidebarLogoCollapsed.png";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import {
@@ -21,6 +21,7 @@ import {
   BiSolidArrowToLeft,
 } from "react-icons/bi";
 import { TbReport } from "react-icons/tb";
+import { useSelector } from "react-redux";
 
 // Define navigation items structure for reusability
 const navItems = [
@@ -51,15 +52,13 @@ const navItems = [
       { title: "Sub Admin List", path: "#" },
     ],
   },
-  {
-    id: "kyc",
-    title: "KYC",
-    icon: <IoPersonOutline className="w-5 h-5" />,
-    hasDropdown: true,
-    children: [
-      { title: "KYC History", path: "/admin/kyc-history" },
-    ],
-  },
+  // {
+  //   id: "kyc",
+  //   title: "KYC",
+  //   icon: <IoPersonOutline className="w-5 h-5" />,
+  //   hasDropdown: true,
+  //   children: [{ title: "KYC History", path: "/admin/kyc-history" }],
+  // },
   {
     id: "deposit",
     title: "Deposit",
@@ -103,12 +102,38 @@ const navItems = [
   },
 ];
 
-function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode = false }) {
+function Sidebar({
+  sidebarOpen,
+  setSidebarOpen,
+  variant = "default",
+  isDarkMode = false,
+}) {
   const location = useLocation();
   const { pathname } = location;
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
+
+  const auth = useSelector((state) => state.auth);
+  const [lastLogin, setLastLogin] = useState("Not available");
+
+  useEffect(() => {
+    const formatLastLogin = () => {
+      try {
+        const timestamp = auth.lastLogin || localStorage.getItem('lastLoginTime');
+        if (timestamp) {
+          const date = new Date(timestamp);
+          return date.toLocaleString(); // Format as localized date and time
+        }
+        return "Not available";
+      } catch (error) {
+        console.error("Error formatting last login time:", error);
+        return "Not available";
+      }
+    };
+    
+    setLastLogin(formatLastLogin());
+  }, [auth.lastLogin]);
 
   const getStoredSidebarExpanded = () => {
     try {
@@ -168,9 +193,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
   const renderNavItemChildren = (item, open) => {
     return item.children?.map((child, index) => {
       if (child.hidden) return null;
-      
+
       const isActive = pathname === child.path;
-      
+
       return (
         <li key={`${item.id}-child-${index}`} className="mb-1 last:mb-0">
           <NavLink
@@ -211,11 +236,12 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
         id="sidebar"
         ref={sidebar}
         className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] w-64 lg:w-20 lg:sidebar-expanded:w-64 shrink-0 
-        ${variant === "v2" 
-          ? "border-r border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900" 
-          : "border-r-2 rounded-2xl border-[#2742ea] bg-white dark:bg-slate-900 shadow-lg shadow-violet-500/5 dark:shadow-violet-400/5"
+        ${
+          variant === "v2"
+            ? "border-r border-slate-200 dark:border-slate-700/60 bg-white dark:bg-slate-900"
+            : "border-r-2 rounded-2xl border-[#2742ea] bg-white dark:bg-slate-900 shadow-lg shadow-violet-500/5 dark:shadow-violet-400/5"
         }
-        p-4 transition-all duration-200 ease-in-out ${
+        px-2 py-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
         }`}
       >
@@ -230,9 +256,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                 className="w-[8rem] h-[1.7rem] lg:hidden lg:sidebar-expanded:block"
               />
               <div className="hidden lg:block lg:sidebar-expanded:hidden">
-               
-                  <img src={sidebarLogoCollapsed} alt="Sidebar Logo Small" />
-               
+                <img
+                  src={sidebarLogoCollapsed}
+                  alt="Sidebar Logo Small"
+                  className="w-7 h-7"
+                />
               </div>
             </NavLink>
 
@@ -275,13 +303,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
             <ul className="space-y-1">
               {/* Map through navItems to generate sidebar links */}
               {navItems.map((item) => {
-                const isActive = pathname === item.path || pathname.includes(item.id);
-                
+                const isActive =
+                  pathname === item.path || pathname.includes(item.id);
+
                 return (
-                  <SidebarLinkGroup
-                    key={item.id}
-                    activecondition={isActive}
-                  >
+                  <SidebarLinkGroup key={item.id} activecondition={isActive}>
                     {(handleClick, open) => {
                       return (
                         <React.Fragment>
@@ -305,34 +331,46 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
                           >
                             {item.path ? (
                               <NavLink end to={item.path}>
-                                <div 
-                                  className="flex items-center justify-between py-1" 
+                                <div
+                                  className="flex items-center  lg:justify-center lg:sidebar-expanded:justify-between py-1"
                                   title={item.title}
                                 >
                                   <div className="flex items-center">
-                                    <span className={`bg-gradient-to-br ${isActive ? 
-                                      'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
-                                      'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
-                                      p-1.5 rounded-md text-white shadow-sm`}>
-                                      {React.cloneElement(item.icon, { className: "w-4 h-4" })}
+                                    <span
+                                      className={`bg-gradient-to-br ${
+                                        isActive
+                                          ? "from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]"
+                                          : "from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700"
+                                      } 
+                                      p-1.5 rounded-md text-white shadow-sm`}
+                                    >
+                                      {React.cloneElement(item.icon, {
+                                        className: "w-4 h-4",
+                                      })}
                                     </span>
-                                    <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
+                                    <span className="text-sm  ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
                                       {item.title}
                                     </span>
                                   </div>
                                 </div>
                               </NavLink>
                             ) : (
-                              <div 
-                                className="flex items-center justify-between py-1" 
+                              <div
+                                className="flex items-center lg:justify-center lg:sidebar-expanded:justify-between py-1"
                                 title={item.title}
                               >
                                 <div className="flex items-center">
-                                  <span className={`bg-gradient-to-br ${isActive ? 
-                                    'from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]' : 
-                                    'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700'} 
-                                    p-1.5 rounded-md text-white shadow-sm`}>
-                                    {React.cloneElement(item.icon, { className: "w-4 h-4" })}
+                                  <span
+                                    className={`bg-gradient-to-br ${
+                                      isActive
+                                        ? "from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]"
+                                        : "from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700"
+                                    } 
+                                    p-1.5 rounded-md text-white shadow-sm`}
+                                  >
+                                    {React.cloneElement(item.icon, {
+                                      className: "w-4 h-4",
+                                    })}
                                   </span>
                                   <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
                                     {item.title}
@@ -366,16 +404,20 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default", isDarkMode 
             </ul>
           </div>
         </div>
-        
+
         {/* Admin profile section */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-3">
-          <div className="flex items-center lg:px-0 lg:sidebar-expanded:px-2  py-2">
+          <div className="flex items-center lg:justify-center lg:px-0 lg:sidebar-expanded:px-2  py-2">
             <div className=" w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
               AD
             </div>
             <div className="ml-3 lg:hidden lg:sidebar-expanded:block duration-200">
-              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">Master Admin</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Last Login: timestamp (last login)</p>
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
+                Master Admin
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Last Login: {lastLogin}
+              </p>
             </div>
           </div>
         </div>
