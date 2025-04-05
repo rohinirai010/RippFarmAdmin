@@ -63,6 +63,7 @@ import TeamWinningBonus from "./pages/Reports/TeamWinningBonus";
 import RoyaltyBonus from "./pages/Bonanza/RoyaltyBonus";
 import SpecialReward from "./pages/Bonanza/SpecialReward";
 import HelpDesk from "./pages/Ticket/Ticket";
+import CardDesign from "./pages/CardDesign";
 
 function App() {
   const location = useLocation();
@@ -148,6 +149,12 @@ function App() {
           exact
           path="/admin/ticket"
           element={<HelpDesk />}
+        />
+        
+<Route
+          exact
+          path="/admin/cardDesign"
+          element={<CardDesign />}
         />
 
         {/* user routes */}

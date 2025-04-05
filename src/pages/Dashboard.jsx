@@ -155,12 +155,12 @@ const Dashboard = () => {
 
               <div className="relative flex flex-col sm:flex-row justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold mb-2 sm:text-3xl">
+                  <h1 className="text-xl font-bold mb-2 sm:text-3xl">
                     Welcome to Rippfarm Master Admin Dashboard
                   </h1>
                   
-                  <div className="mt-4 flex gap-3 flex-row">
-                  <button className="bg-white text-indigo-600 px-3  py-2 text-sm  rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto cursor-pointer">
+                  <div className="mt-4 flex gap-3 flex-col sm:flex-row">
+                  <button className="bg-white text-indigo-600 px-3  py-2 -sm  rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto cursor-pointer">
   <DollarSign size={16} className="mr-2" />
   <span className="group-hover:mr-1 transition-all">
     Add Funds

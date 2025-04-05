@@ -108,6 +108,12 @@ const navItems = [
     icon: <SiHelpdesk className="w-5 h-5" />,
     path: "/admin/ticket",
   },
+  {
+    id: "carddesign",
+    title: "CardDesign",
+    icon: <SiHelpdesk className="w-5 h-5" />,
+    path: "/admin/cardDesign",
+  },
 ];
 
 function Sidebar({
