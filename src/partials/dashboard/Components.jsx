@@ -43,9 +43,9 @@ export const IncomeCard = ({ title, amount, icon, change, color }) => {
           {icon}
         </div>
       </div>
-      <div className="text-2xl font-bold text-gray-900 dark:text-white">
+      <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
         {amount}
-        <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">USDT</span>
+        <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">$</span>
       </div>
       {change && (
         <div className="mt-2 text-xs flex items-center">
@@ -76,7 +76,7 @@ export const SystemSummaryCard = ({ title, value, icon, type = "default", subtit
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${getCardStyle()}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-lg p-2 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${getCardStyle()}`}>
       <div className="flex items-center">
         <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg mr-4">
           {icon}
@@ -169,15 +169,15 @@ export const LiveActivityFeed = ({ activities }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-center mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl  shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between items-center p-4 ">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Live Activity</h2>
         <button className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">View All</button>
       </div>
       
-      <div className="space-y-3">
+      <div className="space-y-3 p-2">
         {activities.map((activity, index) => (
-          <div key={index} className="flex items-start p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+          <div key={index} className="flex items-start p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
             <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-full mr-3">
               {getActivityIcon(activity.type)}
             </div>
@@ -253,53 +253,57 @@ export const SystemControlsCard = () => {
         <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">ROI Process</div>
-            <div className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs px-2 py-0.5 rounded-full">
-              Active
-            </div>
+           
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Last run: 2 hours ago</div>
           <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             Click to manage
           </div>
+          <div className="flex items-center justify-center bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs px-2 py-0.5 rounded-full">
+              Active
+            </div>
         </button>
         
         <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Maintenance Mode</div>
-            <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 text-xs px-2 py-0.5 rounded-full">
-              Off
-            </div>
+          
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">System fully operational</div>
           <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             Click to enable
           </div>
+          <div className="flex items-center justify-center bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 text-xs px-2 py-0.5 rounded-full">
+              Off
+            </div>
         </button>
         
         <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
           <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">KYC Verification</div>
-            <div className="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-xs px-2 py-0.5 rounded-full">
-              7 Pending
-            </div>
+            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Gateway Status</div>
+          
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Requires review</div>
           <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             Click to process
           </div>
+          <div className="flex items-center justify-center bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-xs px-2 py-0.5 rounded-full">
+               Live
+            </div>
         </button>
-        
+    
         <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
           <div className="flex items-center justify-between">
             <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Announcements</div>
-            <div className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
-              Draft
-            </div>
+           
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">1 pending notification</div>
           <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
             Click to publish
           </div>
+          <div className="flex items-center justify-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
+              Draft
+            </div>
         </button>
       </div>
     </div>
@@ -309,12 +313,21 @@ export const SystemControlsCard = () => {
 // Income Overview Dashboard Component
 export const IncomeOverviewDashboard = () => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-2 md:p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Income Distribution</h2>
-        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-3 py-1 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+        <div className="flex flex-row gap-2">
+
+        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+          Today
+        </button>
+        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+          This Week
+        </button>
+        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
           This Month
         </button>
+        </div>
       </div>
       
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
