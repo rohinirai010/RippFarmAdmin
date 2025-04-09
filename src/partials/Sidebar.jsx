@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import mainLogo from "../images/mainLogo.png";
 import logoLight from "../images/logoLight.png";
 import sidebarLogoCollapsed from "../images/sidebarLogoCollapsed.png";
-import SidebarLinkGroup from "./SidebarLinkGroup";
+import SidebarLinkGroup, { DropdownProvider } from "./SidebarLinkGroup";
 import {
   MdKeyboardArrowDown,
   MdOutlineCardGiftcard,
@@ -14,7 +14,6 @@ import {
   RiContactsBookLine,
   RiLuggageDepositLine,
 } from "react-icons/ri";
-import { IoPersonOutline } from "react-icons/io5";
 import {
   BiArrowToRight,
   BiMoneyWithdraw,
@@ -49,17 +48,10 @@ const navItems = [
     icon: <RiContactsBook3Line className="w-5 h-5" />,
     hasDropdown: true,
     children: [
-      { title: "Create Sub Admin", path: "#" },
-      { title: "Sub Admin List", path: "#" },
+      { title: "Create Sub Admin", path: "/admin/create-subadmin" },
+     
     ],
   },
-  // {
-  //   id: "kyc",
-  //   title: "KYC",
-  //   icon: <IoPersonOutline className="w-5 h-5" />,
-  //   hasDropdown: true,
-  //   children: [{ title: "KYC History", path: "/admin/kyc-history" }],
-  // },
   {
     id: "deposit",
     title: "Deposit",
@@ -100,19 +92,6 @@ const navItems = [
       { title: "Royalty Bonus", path: "/admin/royalty-bonus" },
       { title: "Special Reward", path: "/admin/special-reward" },
     ],
-    
-  },
-  {
-    id: "ticket",
-    title: "Ticket",
-    icon: <SiHelpdesk className="w-5 h-5" />,
-    path: "/admin/ticket",
-  },
-  {
-    id: "carddesign",
-    title: "CardDesign",
-    icon: <SiHelpdesk className="w-5 h-5" />,
-    path: "/admin/cardDesign",
   },
 ];
 
@@ -223,8 +202,6 @@ function Sidebar({
     return item.children?.map((child, index) => {
       if (child.hidden) return null;
 
-      const isActive = pathname === child.path;
-
       return (
         <li key={`${item.id}-child-${index}`} className="mb-1 last:mb-0">
           <NavLink
@@ -240,7 +217,7 @@ function Sidebar({
           >
             <div className="flex items-center">
               <div className="w-1 h-1 rounded-full bg-current mr-2"></div>
-              <span className="text-xs lg:hidden lg:sidebar-expanded:block duration-200">
+              <span className="text-sm lg:hidden lg:sidebar-expanded:block duration-200">
                 {child.title}
               </span>
             </div>
@@ -323,44 +300,72 @@ function Sidebar({
         </div>
 
         {/* Links */}
-        <div className="space-y-0.5 mt-6 scrollbar-thin scrollbar-thumb-violet-200 dark:scrollbar-thumb-violet-900 scrollbar-track-transparent overflow-hidden">
+        <div className="space-y-0.5 mb-6 mt-6 overflow-y-auto scrollbar-thin scrollbar-thumb-violet-200 dark:scrollbar-thumb-violet-900 scrollbar-track-transparent overflow-hidden">
           {/* Pages group */}
           <div>
             <h3 className="text-xs uppercase text-slate-400 dark:text-slate-500 font-semibold tracking-wider mb-3 lg:hidden lg:sidebar-expanded:block">
               Menu
             </h3>
-            <ul className="space-y-1">
-              {/* Map through navItems to generate sidebar links */}
-              {navItems.map((item) => {
-                const isActive = isParentActive(item);
+            <DropdownProvider>
+              <ul className="space-y-1">
+                {/* Map through navItems to generate sidebar links */}
+                {navItems.map((item) => {
+                  const isActive = isParentActive(item);
 
-                return (
-                  <SidebarLinkGroup key={item.id} activecondition={isActive}>
-                    {(handleClick, open) => {
-                      return (
-                        <React.Fragment>
-                          <a
-                            href={item.path || "#0"}
-                            className={`block transition duration-150 ${
-                              isActive
-                                ? "bg-gradient-to-r from-[#5767d3] to-[#2742ea] bg-clip-text text-transparent"
-                                : "text-slate-600 dark:text-slate-400 dark:hover:text-[#2742ea]/80"
-                            }`}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (item.hasDropdown) {
-                                handleClick();
-                                setSidebarExpanded(true);
-                              } else if (item.path) {
-                                // Navigate directly for non-dropdown items
-                                window.location.href = item.path;
-                              }
-                            }}
-                          >
-                            {item.path ? (
-                              <NavLink end to={item.path}>
+                  return (
+                    <SidebarLinkGroup 
+                      key={item.id} 
+                      activecondition={isActive}
+                      id={item.id} // Pass the ID to identify which dropdown is active
+                    >
+                      {(handleClick, open) => {
+                        return (
+                          <React.Fragment>
+                            <a
+                              href={item.path || "#0"}
+                              className={`block transition duration-150 ${
+                                isActive
+                                  ? "bg-gradient-to-r from-[#5767d3] to-[#2742ea] bg-clip-text text-transparent"
+                                  : "text-slate-600 dark:text-slate-400 dark:hover:text-[#2742ea]/80"
+                              }`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (item.hasDropdown) {
+                                  handleClick();
+                                  setSidebarExpanded(true);
+                                } else if (item.path) {
+                                  window.location.href = item.path;
+                                }
+                              }}
+                            >
+                              {item.path ? (
+                                <NavLink end to={item.path}>
+                                  <div
+                                    className="flex items-center lg:justify-center lg:sidebar-expanded:justify-between py-1"
+                                    title={item.title}
+                                  >
+                                    <div className="flex items-center">
+                                      <span
+                                        className={`bg-gradient-to-br ${
+                                          isActive
+                                            ? "from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]"
+                                            : "from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700"
+                                        } 
+                                        p-1.5 rounded-md text-white shadow-sm`}
+                                      >
+                                        {React.cloneElement(item.icon, {
+                                          className: "w-4 h-4",
+                                        })}
+                                      </span>
+                                      <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
+                                        {item.title}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </NavLink>
+                              ) : (
                                 <div
-                                  className="flex items-center  lg:justify-center lg:sidebar-expanded:justify-between py-1"
+                                  className="flex items-center lg:justify-center lg:sidebar-expanded:justify-between py-1"
                                   title={item.title}
                                 >
                                   <div className="flex items-center">
@@ -376,68 +381,45 @@ function Sidebar({
                                         className: "w-4 h-4",
                                       })}
                                     </span>
-                                    <span className="text-sm  ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
+                                    <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
                                       {item.title}
                                     </span>
                                   </div>
+                                  {item.hasDropdown && (
+                                    <div className="flex shrink-0">
+                                      <MdKeyboardArrowDown
+                                        className={`w-5 h-5 shrink-0 lg:hidden lg:sidebar-expanded:block transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
+                                          open && "rotate-180"
+                                        }`}
+                                      />
+                                    </div>
+                                  )}
                                 </div>
-                              </NavLink>
-                            ) : (
-                              <div
-                                className="flex items-center lg:justify-center lg:sidebar-expanded:justify-between py-1"
-                                title={item.title}
-                              >
-                                <div className="flex items-center">
-                                  <span
-                                    className={`bg-gradient-to-br ${
-                                      isActive
-                                        ? "from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea]"
-                                        : "from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-700"
-                                    } 
-                                    p-1.5 rounded-md text-white shadow-sm`}
-                                  >
-                                    {React.cloneElement(item.icon, {
-                                      className: "w-4 h-4",
-                                    })}
-                                  </span>
-                                  <span className="text-sm ml-3 font-medium lg:hidden lg:sidebar-expanded:block duration-200">
-                                    {item.title}
-                                  </span>
-                                </div>
-                                {item.hasDropdown && (
-                                  <div className="flex shrink-0">
-                                    <MdKeyboardArrowDown
-                                      className={`w-5 h-5 shrink-0 lg:hidden lg:sidebar-expanded:block transition-transform duration-150 ml-1 text-slate-400 dark:text-slate-500 ${
-                                        open && "rotate-180"
-                                      }`}
-                                    />
-                                  </div>
-                                )}
+                              )}
+                            </a>
+                            {item.hasDropdown && (
+                              <div className="lg:hidden lg:sidebar-expanded:block">
+                                <ul className={`pl-7 mt-1 ${!open && "hidden"}`}>
+                                  {renderNavItemChildren(item, open)}
+                                </ul>
                               </div>
                             )}
-                          </a>
-                          {item.hasDropdown && (
-                            <div className="lg:hidden lg:sidebar-expanded:block">
-                              <ul className={`pl-7 mt-1 ${!open && "hidden"}`}>
-                                {renderNavItemChildren(item, open)}
-                              </ul>
-                            </div>
-                          )}
-                        </React.Fragment>
-                      );
-                    }}
-                  </SidebarLinkGroup>
-                );
-              })}
-            </ul>
+                          </React.Fragment>
+                        );
+                      }}
+                    </SidebarLinkGroup>
+                  );
+                })}
+              </ul>
+            </DropdownProvider>
           </div>
         </div>
 
         {/* Admin profile section */}
         <div className="mt-auto border-t border-slate-100 dark:border-slate-800 pt-3">
-          <div className="flex items-center lg:justify-center lg:px-0 lg:sidebar-expanded:px-2  py-2">
-            <div className=" w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
-              AD
+          <div className="flex items-center lg:justify-center lg:px-0 lg:sidebar-expanded:px-2 py-2">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-violet-500 to-[#2742ea] dark:from-violet-600 dark:to-[#2742ea] flex items-center justify-center text-white font-medium text-sm">
+              MA
             </div>
             <div className="ml-3 lg:hidden lg:sidebar-expanded:block duration-200">
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200">

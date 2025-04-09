@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 
-const SidebarLinkGroup = ({ children, activecondition }) => {
-  const [open, setOpen] = useState(activecondition);
+// Create a context to manage which dropdown is currently open
+const DropdownContext = createContext({
+  activeDropdown: null,
+  setActiveDropdown: () => {}
+});
 
+// Provider component to wrap around the sidebar navigation
+export const DropdownProvider = ({ children }) => {
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  
+  return (
+    <DropdownContext.Provider value={{ activeDropdown, setActiveDropdown }}>
+      {children}
+    </DropdownContext.Provider>
+  );
+};
+
+const SidebarLinkGroup = ({ children, activecondition, id }) => {
+  const { activeDropdown, setActiveDropdown } = useContext(DropdownContext);
+  const isOpen = id === activeDropdown;
+  
   const handleClick = () => {
-    setOpen(!open);
+    // If this dropdown is already open, close it
+    // Otherwise, open this one (which will close any other open dropdown)
+    setActiveDropdown(isOpen ? null : id);
   };
 
   return (
@@ -18,12 +38,9 @@ const SidebarLinkGroup = ({ children, activecondition }) => {
         }
       `}
     >
-      {children(handleClick, open)}
+      {children(handleClick, isOpen)}
     </li>
   );
 };
 
 export default SidebarLinkGroup;
-
-
-

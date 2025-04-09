@@ -100,7 +100,7 @@ export const loginAdmin = createAsyncThunk(
           id: 1,
           username: "admin",
           role: "administrator",
-          name: "Admin User",
+          name: "Master Admin",
         };
 
         const token =
@@ -235,7 +235,7 @@ const authSlice = createSlice({
     clearMessages: (state) => {
       state.successMessage = null;
     },
-    // Add a forceLogout action to handle edge cases
+    // Added a forceLogout action to handle edge cases
     forceLogout: (state) => {
       state.isAuthenticated = false;
       state.admin = null;
@@ -266,12 +266,12 @@ const authSlice = createSlice({
         state.failedAttempts = 0;
         state.attemptsLeft = MAX_LOGIN_ATTEMPTS;
 
-        // Store last login timestamp
+        // Storing last login timestamp
         const lastLogin = new Date().toISOString();
         localStorage.setItem("lastLoginTime", lastLogin);
         state.lastLogin = lastLogin;
 
-        // Generate new CAPTCHA for next login
+        // Generating new CAPTCHA for next login
         state.captcha = generateCaptcha();
       })
       .addCase(loginAdmin.rejected, (state, action) => {
@@ -288,7 +288,7 @@ const authSlice = createSlice({
           state.blockTimeRemaining =
             action.payload?.blockTimeRemaining || IP_BLOCK_DURATION;
         } else {
-          // Only increment attempts for password failures
+          // Only incremeting attempts for password failures
           if (action.payload?.status === 401) {
             state.failedAttempts += 1;
             state.attemptsLeft =
@@ -297,7 +297,7 @@ const authSlice = createSlice({
           }
         }
 
-        // Generate new CAPTCHA
+        // Generating new CAPTCHA
         state.captcha = generateCaptcha();
       })
       // Logout cases
@@ -309,7 +309,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.admin = null;
         state.token = null;
-        // Clear any messages that might cause confusion
+        // Clearing any messages that might cause confusion
         state.successMessage = null;
         state.error = null;
         state.errorCode = null;

@@ -3,17 +3,15 @@ import {
   ChevronDown,
   ChevronUp,
   Search,
-  Calendar,
   Users,
   User,
   Edit,
-  Edit2,
   Check,
   CalendarIcon,
 } from "lucide-react";
 import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
-import { IoRemove, IoRemoveCircle } from "react-icons/io5";
+import { IoRemoveCircle } from "react-icons/io5";
 import { FaCopy } from "react-icons/fa";
 import {
   copyToClipboard,
@@ -26,7 +24,6 @@ import EditMemberInfo from "./EditMemberInfo";
 import "../../css/additional.css";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import CommonTable from "../../components/CommonTable";
-import DateRangeFilter from "../../partials/members/DateRangeFilter";
 import DatePickerWithRange from "../../components/Datepicker";
 
 const StatsCard = ({ title, value, textColor = "text-black", icon: Icon }) => (
@@ -640,7 +637,6 @@ const filteredData = useMemo(() => {
                 </div>
               )}
 
-              {/* Date Filters */}
              {/* Date Filters */}
 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 mb-6">
   <div className="flex flex-col space-y-2">

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   AlertTriangle,
   Award,
@@ -45,7 +46,6 @@ export const IncomeCard = ({ title, amount, icon, change, color }) => {
       </div>
       <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
         {amount}
-       
       </div>
       {change && (
         <div className="mt-2 text-xs flex items-center">
@@ -58,7 +58,7 @@ export const IncomeCard = ({ title, amount, icon, change, color }) => {
   );
 };
 
-// System Summary Card Component - Expanded for different styles
+// System Summary Card Component 
 export const SystemSummaryCard = ({ title, value, icon, type = "default", subtitle }) => {
   const getCardStyle = () => {
     switch (type) {
@@ -76,7 +76,7 @@ export const SystemSummaryCard = ({ title, value, icon, type = "default", subtit
   };
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-lg p-2 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${getCardStyle()}`}>
+    <div className={` bg-white h-full dark:bg-gray-800 rounded-lg p-2 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 ${getCardStyle()}`}>
       <div className="flex items-center">
         <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg mr-4">
           {icon}
@@ -115,20 +115,20 @@ export const AlertCard = ({
   };
 
   return (
-    <div className={`p-4 rounded-lg border ${bgColors[color] || bgColors.blue}`}>
+    <div className={`p-4 rounded-lg border h-full flex flex-col ${bgColors[color] || bgColors.blue}`}>
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center">
           <div className={`mr-3 ${textColors[color] || textColors.blue}`}>{icon}</div>
           <div className="font-medium">{title}</div>
         </div>
-        <button className={`flex items-center text-sm font-medium ${textColors[color] || textColors.blue}`}>
+        <div className={`flex items-center text-sm font-medium ${textColors[color] || textColors.blue}`}>
           {actionText}
           <ChevronRight size={16} className="ml-1" />
-        </button>
+        </div>
       </div>
       
       {showMetrics ? (
-        <div className="mt-2">
+        <div className="mt-2 flex-1 flex flex-col justify-center">
           <div className="grid grid-cols-3 gap-2 text-center">
             <div className="text-xs text-gray-500 dark:text-gray-400">Today</div>
             <div className="text-xs text-gray-500 dark:text-gray-400">Weekly</div>
@@ -141,7 +141,7 @@ export const AlertCard = ({
           </div>
         </div>
       ) : (
-        <div className="text-2xl font-bold mt-1">{metrics.total || 0}</div>
+        <div className="text-2xl font-bold mt-1 flex-1 flex items-center">{metrics.total || 0}</div>
       )}
     </div>
   );
@@ -150,25 +150,27 @@ export const AlertCard = ({
 // Performance Card Component
 export const PerformanceCard = ({ title, userName, value, icon, rank }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-start">
-        <div className="text-sm text-gray-600 dark:text-gray-400">{title}</div>
-        <div className="flex items-center">
-          <span className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold px-2 py-1 rounded-full">
-            #{rank}
-          </span>
+    <Link to={`/user-performance/${userName.replace(/\s+/g, '-').toLowerCase()}`} className="block">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-start">
+          <div className="text-sm text-gray-600 dark:text-gray-400">{title}</div>
+          <div className="flex items-center">
+            <span className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold px-2 py-1 rounded-full">
+              #{rank}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center mt-3">
+          <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-full mr-3">
+            {icon || <User size={18} className="text-indigo-600 dark:text-indigo-400" />}
+          </div>
+          <div>
+            <div className="font-medium text-gray-900 dark:text-white">{userName}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400">{value}</div>
+          </div>
         </div>
       </div>
-      <div className="flex items-center mt-3">
-        <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-full mr-3">
-          {icon || <User size={18} className="text-indigo-600 dark:text-indigo-400" />}
-        </div>
-        <div>
-          <div className="font-medium text-gray-900 dark:text-white">{userName}</div>
-          <div className="text-sm text-gray-500 dark:text-gray-400">{value}</div>
-        </div>
-      </div>
-    </div>
+    </Link>
   );
 };
 
@@ -191,25 +193,46 @@ export const LiveActivityFeed = ({ activities }) => {
     }
   };
 
+  const getActivityLink = (type) => {
+    switch (type) {
+      case "registration":
+        return "/user-registrations";
+      case "deposit":
+        return "/deposits";
+      case "withdrawal":
+        return "/withdrawals";
+      case "admin":
+        return "/admin-logs";
+      case "support":
+        return "/support-tickets";
+      default:
+        return "/activity";
+    }
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl  shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
-      <div className="flex justify-between items-center p-4 ">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700">
+      <div className="flex justify-between items-center p-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Live Activity</h2>
-        <button className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">View All</button>
+        <Link to="/all-activities" className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
+          View All
+        </Link>
       </div>
       
       <div className="space-y-3 p-2">
         {activities.map((activity, index) => (
-          <div key={index} className="flex items-start p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-            <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-full mr-3">
-              {getActivityIcon(activity.type)}
+          <Link key={index} to={getActivityLink(activity.type)} className="block">
+            <div className="flex items-start p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+              <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded-full mr-3">
+                {getActivityIcon(activity.type)}
+              </div>
+              <div className="flex-1">
+                <div className="font-medium text-gray-900 dark:text-white">{activity.title}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{activity.description}</div>
+                <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{activity.time}</div>
+              </div>
             </div>
-            <div className="flex-1">
-              <div className="font-medium text-gray-900 dark:text-white">{activity.title}</div>
-              <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">{activity.description}</div>
-              <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">{activity.time}</div>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -223,32 +246,38 @@ export const WithdrawalDepositStats = () => {
       <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Withdrawal & Deposit Overview</h2>
       
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-          <div className="text-sm text-gray-500 dark:text-gray-400">Pending Withdrawals</div>
-          <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$4,235</div>
-          <div className="text-xs text-amber-600 dark:text-amber-400 flex items-center mt-1">
-            <AlertTriangle size={12} className="mr-1" />
-            <span>12 requests waiting</span>
+        <Link to="/pending-withdrawals" className="block">
+          <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+            <div className="text-sm text-gray-500 dark:text-gray-400">Pending Withdrawals</div>
+            <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$4,235</div>
+            <div className="text-xs text-amber-600 dark:text-amber-400 flex items-center mt-1">
+              <AlertTriangle size={12} className="mr-1" />
+              <span>12 requests waiting</span>
+            </div>
           </div>
-        </div>
+        </Link>
         
-        <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-          <div className="text-sm text-gray-500 dark:text-gray-400">Approved Today</div>
-          <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$1,890</div>
-          <div className="text-xs text-green-600 dark:text-green-400 flex items-center mt-1">
-            <Check size={12} className="mr-1" />
-            <span>8 completed</span>
+        <Link to="/approved-withdrawals" className="block">
+          <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+            <div className="text-sm text-gray-500 dark:text-gray-400">Approved Today</div>
+            <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$1,890</div>
+            <div className="text-xs text-green-600 dark:text-green-400 flex items-center mt-1">
+              <Check size={12} className="mr-1" />
+              <span>8 completed</span>
+            </div>
           </div>
-        </div>
+        </Link>
         
-        <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-          <div className="text-sm text-gray-500 dark:text-gray-400">Declined</div>
-          <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$320</div>
-          <div className="text-xs text-red-600 dark:text-red-400 flex items-center mt-1">
-            <XCircle size={12} className="mr-1" />
-            <span>2 rejected</span>
+        <Link to="/declined-withdrawals" className="block">
+          <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+            <div className="text-sm text-gray-500 dark:text-gray-400">Declined</div>
+            <div className="text-xl font-bold text-gray-900 dark:text-white mt-1">$320</div>
+            <div className="text-xs text-red-600 dark:text-red-400 flex items-center mt-1">
+              <XCircle size={12} className="mr-1" />
+              <span>2 rejected</span>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
       
       <div className="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-100 dark:border-indigo-800">
@@ -257,9 +286,11 @@ export const WithdrawalDepositStats = () => {
             <div className="text-sm font-medium text-indigo-700 dark:text-indigo-300">Quick Actions</div>
             <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">Process pending withdrawals</div>
           </div>
-          <button className="bg-indigo-600 text-white text-xs px-3 py-1 rounded-lg hover:bg-indigo-700 transition-colors">
-            Review
-          </button>
+          <Link to="/review-withdrawals">
+            <button className="bg-indigo-600 text-white text-xs px-3 py-1 rounded-lg hover:bg-indigo-700 transition-colors">
+              Review
+            </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -273,61 +304,65 @@ export const SystemControlsCard = () => {
       <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">System Controls</h2>
       
       <div className="grid grid-cols-2 gap-3">
-        <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">ROI Process</div>
-           
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Last run: 2 hours ago</div>
-          <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Click to manage
-          </div>
-          <div className="flex items-center justify-center bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs px-2 py-0.5 rounded-full">
-              Active
+        <Link to="/roi-management">
+          <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group w-full h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-2">ROI Process</div>
+              <div className="flex-shrink-0 flex items-center justify-center bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs px-2 py-0.5 rounded-full">
+                Active
+              </div>
             </div>
-        </button>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Last run: 2 hours ago</div>
+            <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Click to manage
+            </div>
+          </button>
+        </Link>
         
-        <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Maintenance Mode</div>
-          
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">System fully operational</div>
-          <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Click to enable
-          </div>
-          <div className="flex items-center justify-center bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 text-xs px-2 py-0.5 rounded-full">
-              Off
+        <Link to="/maintenance-settings">
+          <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group w-full h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-2">Maintenance Mode</div>
+              <div className="flex-shrink-0 flex items-center justify-center bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 text-xs px-2 py-0.5 rounded-full">
+                Off
+              </div>
             </div>
-        </button>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">System fully operational</div>
+            <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Click to enable
+            </div>
+          </button>
+        </Link>
         
-        <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Gateway Status</div>
-          
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Requires review</div>
-          <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Click to process
-          </div>
-          <div className="flex items-center justify-center bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-xs px-2 py-0.5 rounded-full">
-               Live
+        <Link to="/gateway-status">
+          <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group w-full h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-2">Gateway Status</div>
+              <div className="flex-shrink-0 flex items-center justify-center bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-xs px-2 py-0.5 rounded-full">
+                Live
+              </div>
             </div>
-        </button>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Requires review</div>
+            <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Click to process
+            </div>
+          </button>
+        </Link>
     
-        <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300">Announcements</div>
-           
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">1 pending notification</div>
-          <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            Click to publish
-          </div>
-          <div className="flex items-center justify-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
-              Draft
+        <Link to="/announcements">
+          <button className="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors group w-full h-full flex flex-col justify-between">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate pr-2">Announcements</div>
+              <div className="flex-shrink-0 flex items-center justify-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">
+                Draft
+              </div>
             </div>
-        </button>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">1 pending notification</div>
+            <div className="text-xs text-indigo-600 dark:text-indigo-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              Click to publish
+            </div>
+          </button>
+        </Link>
       </div>
     </div>
   );
@@ -340,16 +375,15 @@ export const IncomeOverviewDashboard = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Income Distribution</h2>
         <div className="flex flex-row gap-2">
-
-        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
-          Today
-        </button>
-        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
-          This Week
-        </button>
-        <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
-          This Month
-        </button>
+          <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+            Today
+          </button>
+          <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+            This Week
+          </button>
+          <button className="text-xs font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 px-2 md:px-3 py-1 rounded-xl md:rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors">
+            This Month
+          </button>
         </div>
       </div>
       
@@ -422,34 +456,42 @@ export const PerformanceEngagementSection = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <PerformanceCard 
-          title="Top Earner" 
-          userName="Sarah Johnson" 
-          value="$3,240 earned today" 
-          icon={<Award size={18} className="text-amber-500" />}
-          rank="1"
-        />
-        <PerformanceCard 
-          title="Most Active Referrer" 
-          userName="Michael Chen" 
-          value="12 new referrals today" 
-          icon={<UserCheck size={18} className="text-green-500" />}
-          rank="1"
-        />
-        <PerformanceCard 
-          title="Fastest Growing Team" 
-          userName="Team Apex" 
-          value="38 new members this week" 
-          icon={<Users size={18} className="text-blue-500" />}
-          rank="1"
-        />
-        <PerformanceCard 
-          title="Top ROI Earner" 
-          userName="Robert Frost" 
-          value="$1,890 ROI income today" 
-          icon={<Star size={18} className="text-purple-500" />}
-          rank="1"
-        />
+        <Link to="/user-performance/sarah-johnson">
+          <PerformanceCard 
+            title="Top Earner" 
+            userName="Sarah Johnson" 
+            value="$3,240 earned today" 
+            icon={<Award size={18} className="text-amber-500" />}
+            rank="1"
+          />
+        </Link>
+        <Link to="/user-performance/michael-chen">
+          <PerformanceCard 
+            title="Most Active Referrer" 
+            userName="Michael Chen" 
+            value="12 new referrals today" 
+            icon={<UserCheck size={18} className="text-green-500" />}
+            rank="1"
+          />
+        </Link>
+        <Link to="/user-performance/team-apex">
+          <PerformanceCard 
+            title="Fastest Growing Team" 
+            userName="Team Apex" 
+            value="38 new members this week" 
+            icon={<Users size={18} className="text-blue-500" />}
+            rank="1"
+          />
+        </Link>
+        <Link to="/user-performance/robert-frost">
+          <PerformanceCard 
+            title="Top ROI Earner" 
+            userName="Robert Frost" 
+            value="$1,890 ROI income today" 
+            icon={<Star size={18} className="text-purple-500" />}
+            rank="1"
+          />
+        </Link>
       </div>
     </div>
   );
