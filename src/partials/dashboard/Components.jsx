@@ -45,7 +45,7 @@ export const IncomeCard = ({ title, amount, icon, change, color }) => {
       </div>
       <div className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white">
         {amount}
-        <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">$</span>
+       
       </div>
       {change && (
         <div className="mt-2 text-xs flex items-center">
@@ -92,7 +92,14 @@ export const SystemSummaryCard = ({ title, value, icon, type = "default", subtit
 };
 
 // Alert Card Component
-export const AlertCard = ({ title, count, color, icon, actionText = "View All" }) => {
+export const AlertCard = ({ 
+  title, 
+  color, 
+  icon, 
+  actionText = "View All",
+  showMetrics = false,
+  metrics = { today: 0, weekly: 0, monthly: 0 }
+}) => {
   const bgColors = {
     red: "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
     amber: "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800",
@@ -108,18 +115,34 @@ export const AlertCard = ({ title, count, color, icon, actionText = "View All" }
   };
 
   return (
-    <div className={`p-4 rounded-lg border ${bgColors[color] || bgColors.blue} flex justify-between items-center`}>
-      <div className="flex items-center">
-        <div className={`mr-3 ${textColors[color] || textColors.blue}`}>{icon}</div>
-        <div>
-          <div className={`font-medium ${textColors[color] || textColors.blue}`}>{title}</div>
-          <div className="text-2xl font-bold mt-1">{count}</div>
+    <div className={`p-4 rounded-lg border ${bgColors[color] || bgColors.blue}`}>
+      <div className="flex justify-between items-center mb-3">
+        <div className="flex items-center">
+          <div className={`mr-3 ${textColors[color] || textColors.blue}`}>{icon}</div>
+          <div className="font-medium">{title}</div>
         </div>
+        <button className={`flex items-center text-sm font-medium ${textColors[color] || textColors.blue}`}>
+          {actionText}
+          <ChevronRight size={16} className="ml-1" />
+        </button>
       </div>
-      <button className={`flex items-center text-sm font-medium ${textColors[color] || textColors.blue}`}>
-        {actionText}
-        <ChevronRight size={16} className="ml-1" />
-      </button>
+      
+      {showMetrics ? (
+        <div className="mt-2">
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="text-xs text-gray-500 dark:text-gray-400">Today</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Weekly</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">Monthly</div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-center mt-1">
+            <div className="text-xl font-bold">{metrics.today}</div>
+            <div className="text-xl font-bold">{metrics.weekly}</div>
+            <div className="text-xl font-bold">{metrics.monthly}</div>
+          </div>
+        </div>
+      ) : (
+        <div className="text-2xl font-bold mt-1">{metrics.total || 0}</div>
+      )}
     </div>
   );
 };

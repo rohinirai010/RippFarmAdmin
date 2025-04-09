@@ -7,9 +7,7 @@ import {
   Clock,
   Users,
   RefreshCcw,
-  Download,
   Upload,
-  PieChart,
   DollarSign,
   TrendingUp,
   Gift,
@@ -19,20 +17,16 @@ import {
   Zap,
   BarChart2,
   Repeat,
-  ExternalLink,
   Copy,
   ThumbsUp,
-  Facebook,
-  LineChart,
   BarChart3,
   PlusCircle,
-  User,
   UserCheck,
   FileText,
   Lock,
   Shield,
   MessageSquare,
-  UserX,
+  AlertCircle,
 } from "lucide-react";
 import aiBotImage from "../images/aiBotImg.png";
 import dashboardLogo from "../images/loginlogo.png";
@@ -42,11 +36,10 @@ import {
   SocialCard,
   TeamInfoCard,
 } from "../partials/dashboard/HelperComponents";
-import { FaFacebook, FaTelegram, FaWhatsapp } from "react-icons/fa";
+import {  FaTelegram } from "react-icons/fa";
 import "../css/additional.css";
 import { PiHandDepositDuotone, PiHandWithdrawDuotone } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import SalesPerformanceCard from "../partials/dashboard/SalesPerformanceCard";
 import { BsTwitter } from "react-icons/bs";
 import {
   AlertCard,
@@ -99,14 +92,16 @@ const Dashboard = () => {
     setShowCreateAccountFlow(true);
   };
 
-  const handleAccountCreated = (newAccount) => {
-    dispatch(addAccount(newAccount));
-  };
-
   // Animation for notification
   const handleCopyLink = () => {
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const odlMetrics = {
+    today: 0,
+    weekly: 15,
+    monthly: 17
   };
 
   const recentActivities = [
@@ -231,7 +226,7 @@ const Dashboard = () => {
                   </h1>
 
                   <div className="mt-4 flex gap-3 flex-col sm:flex-row">
-                    <button className="bg-white text-indigo-600 px-3  py-2 -sm  rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto cursor-pointer">
+                    <button className="bg-white text-indigo-600 px-3  py-2 text-sm  rounded-lg font-medium hover:bg-opacity-90 transition flex items-center justify-center group w-full sm:w-auto cursor-pointer">
                       <DollarSign size={16} className="mr-2" />
                       <span className="group-hover:mr-1 transition-all">
                         Add Funds
@@ -757,13 +752,14 @@ const Dashboard = () => {
 
               {/* Alert Cards - Second Row */}
               <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <AlertCard
-                  title="Pending gateway Verifications"
-                  count="7"
-                  color="amber"
-                  icon={<Lock size={20} />}
-                  actionText="Review"
-                />
+              <AlertCard
+      title="Missed ODL Accounts"
+      color="amber"
+      icon={<AlertCircle size={20} />}
+      actionText="View Details"
+      showMetrics={true}
+      metrics={odlMetrics}
+    />
                 <AlertCard
                   title="Blocked Users"
                   count="3"
@@ -829,13 +825,6 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* Create Account Flow Modal */}
-      {showCreateAccountFlow && (
-        <CreateAccountFlow
-          onClose={() => setShowCreateAccountFlow(false)}
-          onAccountCreated={handleAccountCreated}
-        />
-      )}
     </div>
   );
 };
