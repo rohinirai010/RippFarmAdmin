@@ -1,12 +1,10 @@
 import React, { useState, useContext, createContext } from 'react';
 
-// Create a context to manage which dropdown is currently open
 const DropdownContext = createContext({
   activeDropdown: null,
   setActiveDropdown: () => {}
 });
 
-// Provider component to wrap around the sidebar navigation
 export const DropdownProvider = ({ children }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   
@@ -22,8 +20,6 @@ const SidebarLinkGroup = ({ children, activecondition, id }) => {
   const isOpen = id === activeDropdown;
   
   const handleClick = () => {
-    // If this dropdown is already open, close it
-    // Otherwise, open this one (which will close any other open dropdown)
     setActiveDropdown(isOpen ? null : id);
   };
 

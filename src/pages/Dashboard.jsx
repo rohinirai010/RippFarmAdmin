@@ -4,44 +4,20 @@ import Sidebar from "../partials/Sidebar";
 import Header from "../partials/Header";
 import {
   ArrowRight,
-  ArrowUpRight,
-  Clock,
   Users,
-  RefreshCcw,
   Upload,
   DollarSign,
-  TrendingUp,
-  Gift,
-  Activity,
-  ChevronDown,
   Bell,
-  Zap,
-  BarChart2,
-  Repeat,
-  Copy,
-  ThumbsUp,
-  BarChart3,
   PlusCircle,
   UserCheck,
   FileText,
-  Lock,
   Shield,
   MessageSquare,
   AlertCircle,
 } from "lucide-react";
-import aiBotImage from "../images/aiBotImg.png";
 import dashboardLogo from "../images/loginlogo.png";
-import {
-  WalletCard,
-  MetricCard,
-  SocialCard,
-  TeamInfoCard,
-} from "../partials/dashboard/HelperComponents";
-import {  FaTelegram } from "react-icons/fa";
 import "../css/additional.css";
-import { PiHandDepositDuotone, PiHandWithdrawDuotone } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { BsTwitter } from "react-icons/bs";
 import {
   AlertCard,
   IncomeOverviewDashboard,
@@ -63,13 +39,7 @@ const Dashboard = () => {
   });
 
   // Interactive states
-  const [activeTab, setActiveTab] = useState("open");
   const [showNotification, setShowNotification] = useState(false);
-  const [aiActive, setAiActive] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
-  const [showCreateAccountFlow, setShowCreateAccountFlow] = useState(false);
-  const dispatch = useDispatch();
-  const accounts = useSelector((state) => state.accounts);
   const [totalUsers, setTotalUsers] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const [inactiveUsers, setInactiveUsers] = useState(0);
@@ -88,16 +58,6 @@ const Dashboard = () => {
 
     fetchUserData();
   }, []);
-
-  const handleCreateAccount = () => {
-    setShowCreateAccountFlow(true);
-  };
-
-  // Animation for notification
-  const handleCopyLink = () => {
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
-  };
 
   const odlMetrics = {
     today: 0,
@@ -138,62 +98,11 @@ const Dashboard = () => {
     },
   ];
 
-  const salesData = {
-    overview: {
-      top: 0.06, // 6%
-      sales_goals: 0.672, // 67.2%
-      number_of_sales: 2608,
-      change: 0.035, // 3.5%
-      total_sales: 42200,
-      total_change: -0.045, // 4.5%
-    },
-    performance: {
-      history: [
-        // Your performance history data here
-        { percent: 0.8 },
-        { percent: 0.2 },
-        // ... rest of the data
-      ],
-    },
-    convert_rate: 0.375,
-    sales_target: {
-      name: "Ann Thrax",
-      vip: true,
-      source: "TikTok Leads",
-    },
-  };
 
   // Generate performance history
   const historyPercents = [
     0.8, 0.2, 0.5, 0.2, 0.9, 0.3, 0.55, 0.3, 0.15, 0.8, 0.4,
   ];
-
-  const today = new Date();
-  salesData.performance.history = historyPercents.map((percent, index) => ({
-    date: new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - (historyPercents.length - 1 - index)
-    ),
-    percent: percent,
-  }));
-
-  // Sample data from the images
-  const dashboardData = {
-    totalTeam: 17,
-    totalReferrals: 2,
-    totalDeposit: 0,
-    totalWithdrawal: 0,
-    earningWallet: 603.3,
-    depositWallet: 0,
-    todaysTeamDeposit: 0,
-    teamBusiness: 0,
-    totalProfit: 0,
-    referralIncome: 0,
-    ibId: "900015/Bampas",
-    openPositions: 0,
-    closedPositions: 0,
-  };
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 overflow-hidden">

@@ -2,11 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { 
   Search, 
   Plus,
-  Download,
   Trash2,
   Eye
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/CommonCard";
 import { IoRemoveCircle } from 'react-icons/io5';
 import Header from '../../partials/Header'; 
 import Sidebar from '../../partials/Sidebar';

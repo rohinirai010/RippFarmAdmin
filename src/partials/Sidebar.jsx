@@ -20,7 +20,6 @@ import {
   BiSolidArrowToLeft,
 } from "react-icons/bi";
 import { TbReport } from "react-icons/tb";
-import { SiHelpdesk } from "react-icons/si";
 import { useSelector } from "react-redux";
 
 // Define navigation items structure for reusability

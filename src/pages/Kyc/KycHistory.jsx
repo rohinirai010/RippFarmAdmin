@@ -1,17 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Search, 
-  Check, 
-  X, 
-  ChevronDown, 
-  ChevronUp,
   Users,
   CheckCircle,
   XCircle,
   Clock,
   Edit2,
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from "../../components/CommonCard";
 import Header from '../../partials/Header';
 import Sidebar from '../../partials/Sidebar';
 import OverallCommonTable from '../../components/OverallCommonTable';

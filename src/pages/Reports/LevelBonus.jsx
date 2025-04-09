@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
-  ChevronDown,
-  ChevronUp,
   Search,
-  Calendar,
   Check,
   CalendarIcon,
 } from "lucide-react";
 import { IoRemoveCircle } from "react-icons/io5";
-import { FaCopy } from "react-icons/fa";
 import Header from "../../partials/Header";
 import Sidebar from "../../partials/Sidebar";
 import DatePickerWithRange from "../../components/Datepicker";
